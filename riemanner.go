@@ -22,8 +22,6 @@ func main() {
 
 	flag.Parse()
 
-	fmt.Println(help, useUDP, server, port)
-
 	proto := "tcp"
 	if useUDP {
 		proto = "udp"
