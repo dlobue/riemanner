@@ -11,11 +11,9 @@ import (
 
 func main() {
 
-	var help bool
 	var useUDP bool
 	var server string
 	var port int
-	flag.BoolVar(&help, "help", false, "Display help text and exit.")
 	flag.BoolVar(&useUDP, "udp", false, "Use UDP instead of the default stream connection (TCP).")
 	flag.StringVar(&server, "server", "localhost", "Send events to the specified remote Riemann server. The default is localhost.")
 	flag.IntVar(&port, "port", 5555, "Use the specified port. The default port is 5555")
