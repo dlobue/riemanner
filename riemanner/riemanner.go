@@ -3,9 +3,9 @@ package riemanner
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"github.com/amir/raidman"
 	"io"
+	"log"
 )
 
 // RaidmanClient is the interface exposed by raidman.
@@ -32,22 +32,18 @@ func (r *Riemanner) Run() error {
 	for scanner.Scan() {
 
 		event := &raidman.Event{}
-		json_err := json.Unmarshal(scanner.Bytes(), &event)
+		jsonErr := json.Unmarshal(scanner.Bytes(), &event)
 		if jsonErr == nil {
-			check(r.rc.Send(event))
+			must(r.rc.Send(event))
 		} else {
-			fmt.Println("Skipping invalid JSON line:", jsonErr)
+			log.Println("Skipping invalid JSON line:", jsonErr)
 		}
 
 	}
-	check(scanner.Err())
-
-	return nil
+	return scanner.Err()
 }
 
-// Helpers
-
-func check(e error) {
+func must(e error) {
 	if e != nil {
 		panic(e)
 	}
