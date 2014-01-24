@@ -33,7 +33,7 @@ func (r *Riemanner) Run() error {
 
 		event := &raidman.Event{}
 		json_err := json.Unmarshal(scanner.Bytes(), &event)
-		if json_err == nil {
+		if jsonErr == nil {
 			check(r.rc.Send(event))
 		} else {
 			fmt.Println("Skipping invalid JSON line:", jsonErr)
