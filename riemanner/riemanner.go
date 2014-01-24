@@ -1,6 +1,9 @@
 package riemanner
 
 import (
+	"bufio"
+	"encoding/json"
+	"fmt"
 	"github.com/amir/raidman"
 	"io"
 )
@@ -21,8 +24,31 @@ func NewRiemanner(rc RaidmanClient, input io.Reader) Riemanner {
 	return Riemanner{rc: rc, input: input}
 }
 
+// Run Takes json input and sends it to riemann
 func (r *Riemanner) Run() error {
-	// TODO: read input using bufio.NewScanner, unmarshal line using json.Unmarshal, send event to riemann via raidman client
+
+	scanner := bufio.NewScanner(r.input)
+
+	for scanner.Scan() {
+
+		event := &raidman.Event{}
+		json_err := json.Unmarshal(scanner.Bytes(), &event)
+		if json_err == nil {
+			check(r.rc.Send(event))
+		} else {
+			fmt.Println("Skipping invalid JSON line:", jsonErr)
+		}
+
+	}
+	check(scanner.Err())
 
 	return nil
+}
+
+// Helpers
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
